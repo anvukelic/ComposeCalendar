@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -45,6 +48,7 @@ internal fun <T : SelectionState> MonthPager(
   dayContent: @Composable BoxScope.(DayState<T>) -> Unit,
   weekHeader: @Composable BoxScope.(List<DayOfWeek>) -> Unit,
   monthContainer: @Composable (content: @Composable (PaddingValues) -> Unit) -> Unit,
+  onMonthSwipe: (YearMonth) -> Unit,
 ) {
   val coroutineScope = rememberCoroutineScope()
 
@@ -66,6 +70,14 @@ internal fun <T : SelectionState> MonthPager(
       monthState = monthState,
       listState = listState,
     )
+  }
+
+  var lastSelectedIndex by remember { mutableStateOf(StartIndex) }
+  flingBehavior.animationTarget?.let { index ->
+    if (lastSelectedIndex != index) {
+      onMonthSwipe(monthListState.getMonthForPage(index))
+      lastSelectedIndex = index
+    }
   }
 
   Column(modifier = Modifier.fillMaxWidth()) {

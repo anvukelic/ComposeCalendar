@@ -82,6 +82,7 @@ public fun SelectableCalendar(
   monthContainer: @Composable (content: @Composable (PaddingValues) -> Unit) -> Unit = { content ->
     Box { content(PaddingValues()) }
   },
+  onMonthSwipe: (YearMonth) -> Unit = {},
 ) {
   Calendar(
     modifier = modifier,
@@ -94,7 +95,8 @@ public fun SelectableCalendar(
     dayContent = dayContent,
     monthHeader = monthHeader,
     daysOfWeekHeader = daysOfWeekHeader,
-    monthContainer = monthContainer
+    monthContainer = monthContainer,
+    onMonthSwipe = onMonthSwipe,
   )
 }
 
@@ -119,6 +121,7 @@ public fun SelectableCalendar(
  * @param monthHeader header for showing the current month and controls for changing it
  * @param daysOfWeekHeader header for showing captions for each day of week
  * @param monthContainer container composable for all the days in current month
+ * @param onMonthSwipe returns new selected [YearMonth]
  */
 @Composable
 public fun StaticCalendar(
@@ -134,6 +137,7 @@ public fun StaticCalendar(
   monthContainer: @Composable (content: @Composable (PaddingValues) -> Unit) -> Unit = { content ->
     Box { content(PaddingValues()) }
   },
+  onMonthSwipe: (YearMonth) -> Unit = {},
 ) {
   Calendar(
     modifier = modifier,
@@ -145,7 +149,8 @@ public fun StaticCalendar(
     dayContent = dayContent,
     monthHeader = monthHeader,
     daysOfWeekHeader = daysOfWeekHeader,
-    monthContainer = monthContainer
+    monthContainer = monthContainer,
+    onMonthSwipe = onMonthSwipe,
   )
 }
 
@@ -181,6 +186,7 @@ public fun <T : SelectionState> Calendar(
   monthContainer: @Composable (content: @Composable (PaddingValues) -> Unit) -> Unit = { content ->
     Box { content(PaddingValues()) }
   },
+  onMonthSwipe: (YearMonth) -> Unit,
 ) {
   val initialMonth = remember { calendarState.monthState.currentMonth }
   val daysOfWeek = remember(firstDayOfWeek) {
@@ -203,6 +209,7 @@ public fun <T : SelectionState> Calendar(
         dayContent = dayContent,
         weekHeader = daysOfWeekHeader,
         monthContainer = monthContainer,
+        onMonthSwipe = onMonthSwipe,
       )
     } else {
       MonthContent(

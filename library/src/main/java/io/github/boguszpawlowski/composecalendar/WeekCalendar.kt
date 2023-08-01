@@ -62,6 +62,7 @@ public class WeekCalendarState<T : SelectionState>(
  * @param dayContent composable rendering the current day
  * @param weekHeader header for showing the current week and controls for changing it
  * @param daysOfWeekHeader header for showing captions for each day of week
+ * @param onWeekSwipe returns new selected [Week]
  */
 @Composable
 public fun SelectableWeekCalendar(
@@ -76,6 +77,7 @@ public fun SelectableWeekCalendar(
     DefaultProperWeekHeader(it)
   },
   daysOfWeekHeader: @Composable BoxScope.(List<DayOfWeek>) -> Unit = { DefaultDaysOfWeekHeader(it) },
+  onWeekSwipe: (Week) -> Unit = {},
 ) {
   WeekCalendar(
     modifier = modifier,
@@ -87,6 +89,7 @@ public fun SelectableWeekCalendar(
     dayContent = dayContent,
     weekHeader = weekHeader,
     daysOfWeekHeader = daysOfWeekHeader,
+    onWeekSwipe = onWeekSwipe,
   )
 }
 
@@ -123,6 +126,7 @@ public fun StaticWeekCalendar(
     DefaultProperWeekHeader(it)
   },
   daysOfWeekHeader: @Composable BoxScope.(List<DayOfWeek>) -> Unit = { DefaultDaysOfWeekHeader(it) },
+  onWeekSwipe: (Week) -> Unit,
 ) {
   WeekCalendar(
     modifier = modifier,
@@ -134,6 +138,7 @@ public fun StaticWeekCalendar(
     dayContent = dayContent,
     weekHeader = weekHeader,
     daysOfWeekHeader = daysOfWeekHeader,
+    onWeekSwipe = onWeekSwipe,
   )
 }
 
@@ -165,6 +170,7 @@ public fun <T : SelectionState> WeekCalendar(
     DefaultProperWeekHeader(it)
   },
   daysOfWeekHeader: @Composable BoxScope.(List<DayOfWeek>) -> Unit = { DefaultDaysOfWeekHeader(it) },
+  onWeekSwipe: (Week) -> Unit = {},
 ) {
   val initialWeek = remember { calendarState.weekState.currentWeek }
   val daysOfWeek = remember(firstDayOfWeek) {
@@ -185,6 +191,7 @@ public fun <T : SelectionState> WeekCalendar(
         scrollWeekDays = scrollWeekDays,
         dayContent = dayContent,
         daysOfWeekHeader = daysOfWeekHeader,
+        onWeekSwipe = onWeekSwipe,
       )
     } else {
       WeekContent(
